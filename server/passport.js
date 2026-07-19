@@ -113,6 +113,11 @@ if (env.OIDC_ENABLED) {
             // Existing user.
             if (existingUser) return done(null, existingUser);
   
+            // Block new user creation when registration is disabled.
+            if (env.DISALLOW_REGISTRATION) {
+              return done(null, false, new Error("Registration is disabled."));
+            }
+
             // New user.
             // Generate a random password which is not supposed to be used directly.
             const salt = await bcrypt.genSalt(12);

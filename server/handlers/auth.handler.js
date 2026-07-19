@@ -22,7 +22,10 @@ function authenticate(type, error, isStrict, redirect) {
         (err || info instanceof Error) &&
         type === "oidc"
       ) {
-        return next(new CustomError("OIDC authentication failed.", 401));
+        const message = (info instanceof Error && info.message)
+          ? info.message
+          : "OIDC authentication failed.";
+        return next(new CustomError(message, 401));
       };
 
       if (err) return next(err);
